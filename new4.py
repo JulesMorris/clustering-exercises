@@ -268,9 +268,18 @@ def prep_zillow(df):
 
     df['region_id_county'] = df['region_id_county'].fillna(df['region_id_county'].mode()[0])
 
+    # convert column to datetime
+    df['transaction_date'] = pd.to_datetime(df['transaction_date'])
+
+    #create column for absolute log error
+    df.loc[:,'abs_logerror'] = df['logerror'].abs()
 
     #drop remaining null values
     df = df.dropna()
+
+    df['region_id_city'] = df['region_id_city'].astype(int)
+
+    df['zip_code'] = df['zip_code'].astype(int)
 
     #train, test, split
     train_validate, test = train_test_split(df, test_size = .2, random_state = 123)
